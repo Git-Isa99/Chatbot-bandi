@@ -18,7 +18,7 @@ Built to practice **prompt engineering** and **RAG (Retrieval-Augmented Generati
 - **Python**
 - **pypdf** — text extraction from PDF files
 - **Groq API** (open-weight models: GPT-OSS-20B) — fast, free AI inference
-- **Streamlit** — web interface
+- **Streamlit** — web app frontend
 - **python-dotenv** — secure API key management
 
 ## Project structure
