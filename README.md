@@ -1,8 +1,8 @@
-# Document Chatbot (RAG) with Python
+# Document Chatbot on Public Funding Programs (PDF)
 
 Chatbot that answers questions about public funding programs ("bandi") based **exclusively** on the content of provided PDF documents, without inventing information that isn't in the text.
 
-Built to practice **prompt engineering** and **RAG (Retrieval-Augmented Generation)** techniques on a real use case related to my field of work (public funding / finance).
+Built to practice prompt engineering and grounded question answering on a real use case related to my field of work (public funding / subsidised finance).
 
 ## What it does
 
@@ -50,6 +50,19 @@ chatbot-bandi/
    streamlit run app.py
    ```
 
+## Design choices
+
+Grounding. Public funding documents are regulatory texts: a wrong answer about eligibility criteria or deadlines has real consequences. The system prompt therefore forces the model to answer only from the supplied text and to state when the information is absent, rather than falling back on its own prior knowledge.
+
+Context injection over retrieval. With a small document set, passing the full extracted text into the prompt is simpler and avoids the failure modes of a poorly tuned retrieval step (relevant passages not retrieved). The trade-off is that it does not scale — see below.
+
+## Known limitations & next steps
+
+Doesn't scale with document volume. The full document text is passed into the prompt on every query. This works with a handful of documents, but with dozens of full-length bandi it would exceed the model's context window, raise token cost per query, and degrade answer quality, since long contexts dilute the model's attention. Next step: implement true RAG — chunking, embeddings and vector search — so that only the passages relevant to the question are passed to the model.
+No source citations. Answers don't yet reference the document and page they come from, which is a requirement in a regulatory domain.
+No systematic evaluation. Answer quality has been assessed manually. A test set of question/expected-answer pairs would allow measuring accuracy and comparing configurations.
+Text-layer PDFs only. Scanned documents and complex tables — both common in real bandi — are not handled; that would require OCR and table-aware parsing.
+
 ## What I learned
 
 - How to design an effective **system prompt** to constrain a model's answers to specific sources
@@ -60,7 +73,6 @@ chatbot-bandi/
 ## Notes
 
 The included PDF documents are **fictional**, created for demonstration purposes only.
-
 
 **Author:** Isabel Zaccaria
 [LinkedIn](https://linkedin.com/in/isabel-zaccaria-06a443223)
